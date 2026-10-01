@@ -7,7 +7,7 @@ test("community is private and is immediately above notices", async ({ page, req
   await login(page);
   await page.goto("/community");
   await expect(page.getByRole("heading", { name: "커뮤니티", exact: true })).toBeVisible();
-  const menu = page.getByRole("navigation", { name: "56사랑 메뉴" });
+  const menu = page.getByRole("navigation", { name: "34사랑 메뉴" });
   const labels = await menu.locator("a").allTextContents();
   expect(labels.findIndex(x => x.includes("커뮤니티"))).toBe(labels.findIndex(x => x.includes("공지")) - 1);
   const folders = await page.request.get("/api/community/folders");
