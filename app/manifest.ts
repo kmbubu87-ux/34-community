@@ -2,9 +2,9 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "56사랑",
-    short_name: "56사랑",
-    description: "56공동체 기도운동, 심방신청, 기도요청, 공지",
+    name: "34사랑",
+    short_name: "34사랑",
+    description: "34공동체 기도운동, 심방신청, 기도요청, 공지",
     start_url: "/",
     display: "standalone",
     background_color: "#ffffff",
