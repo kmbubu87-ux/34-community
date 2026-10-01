@@ -121,7 +121,7 @@ test.describe("challenge-only participant exclusion", () => {
         data: { prayerDate, challengeId: e2eChallengeId, checked: true },
       })).status()).toBe(200);
       await page.reload();
-      await expect(page.getByRole("heading", { name: "56공동체", exact: true })).toBeVisible();
+      await expect(page.getByRole("heading", { name: "34공동체", exact: true })).toBeVisible();
       await expect(page.getByText(e2eAccounts.member.name, { exact: true })).toBeVisible();
     } finally {
       try {
