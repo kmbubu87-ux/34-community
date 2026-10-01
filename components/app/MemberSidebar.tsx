@@ -22,7 +22,7 @@ function isActive(pathname: string, href: string) {
 export function MemberSidebar({ onNavigate, unreadCount, pastoralVisible = false, pastoralCount = 0 }: { onNavigate?: () => void; unreadCount: number; pastoralVisible?: boolean; pastoralCount?: number }) {
   const pathname = usePathname();
   return (
-    <nav className="member-nav" aria-label="56사랑 메뉴">
+    <nav className="member-nav" aria-label="34사랑 메뉴">
       {memberNav.filter(item => item.href !== "/pastoral-reports" || pastoralVisible).map((item) => {
         const active = isActive(pathname, item.href);
         return (
