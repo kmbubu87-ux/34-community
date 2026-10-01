@@ -37,7 +37,7 @@ export function AdminShell({
 
       <aside className={open ? "admin-hub-sidebar is-open" : "admin-hub-sidebar"}>
         <div className="admin-hub-brand">
-          <strong>56사랑 관리자</strong>
+          <strong>34사랑 관리자</strong>
           <span>{displayName} 님</span>
         </div>
         <AdminSidebar onNavigate={() => setOpen(false)} />
@@ -50,7 +50,7 @@ export function AdminShell({
       <section className="admin-hub-stage">
         <header className="admin-hub-topbar">
           <div>
-            <p className="eyebrow">56공동체</p>
+            <p className="eyebrow">34공동체</p>
             <strong>관리자 센터</strong>
           </div>
         </header>
