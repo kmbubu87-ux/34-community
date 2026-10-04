@@ -12,9 +12,9 @@ export default async function Home() {
     return (
       <main className="shell">
         <section className="card empty-state">
-          <strong>아직 활성화된 기도 도전이 없습니다.</strong>
+          <strong>무제</strong>
           <p className="helper-text">
-            {user.displayName} 님, 관리자가 시작일을 설정하면 달력이 열립니다.
+            {user.displayName} 님, 메뉴에서 필요한 기능을 선택해 주세요.
           </p>
         </section>
       </main>
@@ -27,3 +27,4 @@ export default async function Home() {
     </main>
   );
 }
+직
