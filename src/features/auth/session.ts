@@ -2,6 +2,7 @@ import { and, eq, gt, isNull } from "drizzle-orm";
 import { getDb } from "../../db/client";
 import { sessions, users } from "../../db/schema";
 import { newSessionToken, sessionTokenHash } from "./crypto";
+import { reportAccess } from "../pastoral/access";
 
 export const SESSION_COOKIE_NAME = "prayer_session";
 export const SESSION_MAX_AGE_SECONDS = 60 * 60 * 24 * 180;
@@ -65,7 +66,9 @@ export async function getSessionUser(token: string, now = new Date()): Promise<S
     )
     .limit(1);
 
-  return row ?? null;
+  if (!row) return null;
+  if (row.role !== "admin" && !(await reportAccess({ id: row.id, displayName: row.displayName, role: row.role })).visible) return null;
+  return row;
 }
 
 export async function refreshSession(token: string, now = new Date()): Promise<boolean> {
