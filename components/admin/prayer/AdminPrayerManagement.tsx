@@ -123,8 +123,8 @@ export function AdminPrayerManagement({ initial }: { initial: AdminDashboardData
     <div className="admin-feature-page">
       <div className="section-heading">
         <section className="admin-page-heading">
-          <p className="eyebrow">기도운동</p>
-          <h1>기도운동 관리</h1>
+          <p className="eyebrow">무제</p>
+          <h1>무제 관리</h1>
           <p>
             {data.challenge
               ? data.challenge.startDate + " ~ " + data.challenge.endDate
@@ -139,7 +139,7 @@ export function AdminPrayerManagement({ initial }: { initial: AdminDashboardData
       {error && <p className="error-text" role="alert">{error}</p>}
       {message && <p className="success-text" role="status">{message}</p>}
 
-      <section className="admin-kpis" aria-label="기도운동 현황">
+      <section className="admin-kpis" aria-label="무제 현황">
         <article className="card"><span>전체 참여자</span><strong>{data.totals.members}명</strong></article>
         <article className="card"><span>오늘 완료</span><strong>{data.totals.todayCompleted}명 · {percent(data.totals.todayRate)}</strong></article>
         <article className="card"><span>평균 달성률</span><strong>{percent(data.totals.averageRate)}</strong></article>
@@ -217,7 +217,7 @@ export function AdminPrayerManagement({ initial }: { initial: AdminDashboardData
             <button className="modal-close" type="button" onClick={() => setShowChallenge(false)} aria-label="닫기">×</button>
             <form action={submitChallenge} className="admin-form">
               <h2>도전 설정</h2>
-              <label>제목<input name="title" defaultValue={data.challenge?.title ?? "기도운동 1달 도전"} required /></label>
+              <label>제목<input name="title" defaultValue={data.challenge?.title ?? "무제"} required /></label>
               <label>시작일<input name="startDate" type="date" value={challengeStart} onChange={(event) => changeStart(event.target.value)} required /></label>
               <label>종료일<input name="endDate" type="date" value={challengeEnd} onChange={(event) => setChallengeEnd(event.target.value)} required /></label>
               <p className="helper-text">시작일을 바꾸면 1개월 기준 종료일이 자동 계산됩니다.</p>
