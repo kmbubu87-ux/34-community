@@ -43,4 +43,4 @@ describe("34사랑 member shell", () => {
     }
   });
 });
-ㅈ
+  
