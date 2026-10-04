@@ -6,7 +6,7 @@ describe("admin shell", () => {
     const source = readFileSync("components/admin/AdminSidebar.tsx", "utf8");
     const labels = [
       "대시보드",
-      "기도운동 관리",
+      "무제 관리",
       "심방 신청 관리",
       "기도요청 관리",
       "공지 관리",
