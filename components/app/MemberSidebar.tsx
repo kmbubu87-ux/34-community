@@ -6,7 +6,7 @@ import { ReportBadge } from "../pastoral/ReportStatusBadge";
 import { UnreadNoticeBadge } from "../notices/UnreadNoticeBadge";
 
 const memberNav = [
-  { href: "/", label: "기도운동", icon: "🙏" },
+  { href: "/", label: "무제", icon: "🙏" },
   { href: "/visits", label: "심방신청", icon: "♡" },
   { href: "/prayer-requests", label: "기도요청", icon: "♥" },
   { href: "/community", label: "커뮤니티", icon: "💬" },
