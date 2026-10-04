@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 describe("34사랑 member shell", () => {
   it("pins the required menu order", () => {
     const source = readFileSync("components/app/MemberSidebar.tsx", "utf8");
-    const labels = ["기도운동", "심방신청", "기도요청", "공지"];
+    const labels = ["무제", "심방신청", "기도요청", "공지"];
     let cursor = -1;
     for (const label of labels) {
       const next = source.indexOf(label);
@@ -43,3 +43,4 @@ describe("34사랑 member shell", () => {
     }
   });
 });
+ㅈ
