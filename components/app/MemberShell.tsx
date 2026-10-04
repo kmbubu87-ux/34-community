@@ -23,7 +23,7 @@ export function MemberShell({
     <div className="community-app">
       <aside className={`community-sidebar${menuOpen ? " is-open" : ""}`}>
         <div className="sidebar-brand">
-          <img src="/icons/56-heart-192.png" alt="" width={44} height={44} />
+          <img src="/icons/34-heart-192.png" alt="" width={44} height={44} />
           <strong>34사랑</strong>
         </div>
 
