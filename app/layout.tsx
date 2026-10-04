@@ -14,10 +14,10 @@ export const metadata: Metadata = {
   appleWebApp: { capable: true, title: "34사랑", statusBarStyle: "default" },
   icons: {
     icon: [
-      { url: "/icons/56-heart-192.png", sizes: "192x192", type: "image/png" },
-      { url: "/icons/56-heart-512.png", sizes: "512x512", type: "image/png" },
+      { url: "/icons/34-heart-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icons/34-heart-512.png", sizes: "512x512", type: "image/png" },
     ],
-    apple: [{ url: "/icons/56-heart-apple-180.png", sizes: "180x180", type: "image/png" }],
+    apple: [{ url: "/icons/34-heart-apple-180.png", sizes: "180x180", type: "image/png" }],
   },
 };
 
