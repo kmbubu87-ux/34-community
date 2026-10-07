@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 const adminNav = [
   { href: "/admin", label: "대시보드" },
   { href: "/admin/prayer", label: "무제 관리" },
+  { href: "/admin/autumn", label: "가을빛 관리" },
   { href: "/admin/visits", label: "심방 신청 관리" },
   { href: "/admin/prayer-requests", label: "기도요청 관리" },
   { href: "/admin/community", label: "커뮤니티 관리" },
