@@ -68,6 +68,7 @@ describe("visit date policy", () => {
   it("blocks an administrator-disabled weekday", () => {
     expect(evaluateVisitDate({
       date: "2026-10-04",
+      today: "2026-09-27",
       calendarHealthy: true,
       googleBlockedDates: new Set(),
       blockedDates: new Set(),
@@ -83,6 +84,7 @@ describe("visit date policy", () => {
   it("fails closed when Google Calendar health is false", () => {
     expect(evaluateVisitDate({
       date: "2026-10-05",
+      today: "2026-09-27",
       calendarHealthy: false,
       googleBlockedDates: new Set(),
       blockedDates: new Set(),
