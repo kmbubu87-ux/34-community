@@ -7,6 +7,7 @@ import { UnreadNoticeBadge } from "../notices/UnreadNoticeBadge";
 
 const memberNav = [
   { href: "/", label: "무제", icon: "🙏" },
+  { href: "/autumn", label: "가을빛", icon: "🍂" },
   { href: "/visits", label: "심방신청", icon: "♡" },
   { href: "/prayer-requests", label: "기도요청", icon: "♥" },
   { href: "/community", label: "커뮤니티", icon: "💬" },
@@ -19,11 +20,11 @@ function isActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-export function MemberSidebar({ onNavigate, unreadCount, pastoralVisible = false, pastoralCount = 0 }: { onNavigate?: () => void; unreadCount: number; pastoralVisible?: boolean; pastoralCount?: number }) {
+export function MemberSidebar({ onNavigate, unreadCount, pastoralVisible = false, pastoralCount = 0, autumnVisible = false }: { onNavigate?: () => void; unreadCount: number; pastoralVisible?: boolean; pastoralCount?: number; autumnVisible?: boolean }) {
   const pathname = usePathname();
   return (
     <nav className="member-nav" aria-label="34사랑 메뉴">
-      {memberNav.filter(item => item.href !== "/pastoral-reports" || pastoralVisible).map((item) => {
+      {memberNav.filter(item => (item.href !== "/pastoral-reports" || pastoralVisible) && (item.href !== "/autumn" || autumnVisible)).map((item) => {
         const active = isActive(pathname, item.href);
         return (
           <Link key={item.href} href={item.href} className={`member-nav-link${active ? " is-active" : ""}`} aria-current={active ? "page" : undefined} onClick={onNavigate}>
