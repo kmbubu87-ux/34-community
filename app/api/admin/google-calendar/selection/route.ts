@@ -8,6 +8,7 @@ import { DomainError } from "../../../../../src/lib/http";
 
 const Selection = z.object({
   calendarId: z.string().min(1).max(1024),
+  blockingCalendarIds: z.array(z.string().min(1).max(1024)).max(20).optional(),
 });
 
 export async function PUT(request: Request) {
@@ -39,7 +40,10 @@ export async function PUT(request: Request) {
       );
     }
 
-    await selectGoogleCalendar(selected.id, selected.summary);
+    if (parsed.data.blockingCalendarIds?.some(id => !calendars.some(c => c.id === id && ["owner", "writer", "reader"].includes(c.accessRole ?? "")))) {
+      return NextResponse.json({ code: "GOOGLE_BLOCKING_CALENDAR_NOT_READABLE" }, { status: 409 });
+    }
+    await selectGoogleCalendar(selected.id, selected.summary, parsed.data.blockingCalendarIds);
     return NextResponse.json({
       status: "ok",
       calendar: {
