@@ -7,6 +7,7 @@ type CalendarStatus = {
   accountEmail: string | null;
   selectedCalendarId: string | null;
   selectedCalendarName: string | null;
+  blockingCalendarIds?: string[];
 };
 
 type CalendarOption = {
@@ -38,6 +39,7 @@ export function GoogleCalendarSettings({
   const [status, setStatus] = useState<CalendarStatus | null>(null);
   const [calendars, setCalendars] = useState<CalendarOption[]>([]);
   const [selection, setSelection] = useState("");
+  const [blocking, setBlocking] = useState<string[]>([]);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
 
@@ -48,6 +50,7 @@ export function GoogleCalendarSettings({
       const next = body as CalendarStatus;
       setStatus(next);
       setSelection(next.selectedCalendarId ?? "");
+      setBlocking(next.blockingCalendarIds ?? []);
 
       if (next.connected) {
         const list = await readJson("/api/admin/google-calendar/calendars");
@@ -70,6 +73,7 @@ export function GoogleCalendarSettings({
         const next = body as CalendarStatus;
         setStatus(next);
         setSelection(next.selectedCalendarId ?? "");
+      setBlocking(next.blockingCalendarIds ?? []);
 
         if (next.connected) {
           const list = await readJson("/api/admin/google-calendar/calendars");
@@ -102,7 +106,7 @@ export function GoogleCalendarSettings({
     try {
       await readJson("/api/admin/google-calendar/selection", {
         method: "PUT",
-        body: JSON.stringify({ calendarId: selection }),
+        body: JSON.stringify({ calendarId: selection, blockingCalendarIds: blocking }),
       });
       await load();
     } catch (cause) {
@@ -128,6 +132,7 @@ export function GoogleCalendarSettings({
       });
       setCalendars([]);
       setSelection("");
+      setBlocking([]);
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "연결을 해제하지 못했습니다.");
     } finally {
@@ -201,11 +206,18 @@ export function GoogleCalendarSettings({
             </select>
           </label>
 
+          <fieldset disabled={busy}>
+            <legend>심방 신청 차단용 추가 캘린더</legend>
+            <p className="helper-text">선택한 캘린더에 일정이 있는 날짜는 심방 신청이 닫힙니다. 일정 제목·내용은 신청자에게 공개하지 않습니다.</p>
+            {calendars.filter(c => c.id !== selection && ["owner", "writer", "reader"].includes(c.accessRole ?? "")).map(c => (
+              <label className="checkbox-row" key={c.id}><input type="checkbox" checked={blocking.includes(c.id)} onChange={e => setBlocking(current => e.target.checked ? [...current, c.id] : current.filter(id => id !== c.id))} />{c.summary}</label>
+            ))}
+          </fieldset>
           <div className="setting-actions">
             <button
               className="primary-button compact-button"
               type="button"
-              disabled={busy || !selection || selection === status.selectedCalendarId}
+              disabled={busy || !selection || (selection === status.selectedCalendarId && JSON.stringify([...blocking].sort()) === JSON.stringify([...(status.blockingCalendarIds ?? [])].sort()))}
               onClick={() => void saveSelection()}
             >
               캘린더 저장
