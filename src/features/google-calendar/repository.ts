@@ -10,6 +10,7 @@ export type GoogleCalendarConnection = {
   refreshTokenCiphertext: string;
   selectedCalendarId: string | null;
   selectedCalendarName: string | null;
+  blockingCalendarIds?: string[];
 };
 
 export async function getGoogleCalendarConnection(): Promise<GoogleCalendarConnection | null> {
@@ -21,11 +22,12 @@ export async function getGoogleCalendarConnection(): Promise<GoogleCalendarConne
       refreshTokenCiphertext: googleCalendarConnections.refreshTokenCiphertext,
       selectedCalendarId: googleCalendarConnections.selectedCalendarId,
       selectedCalendarName: googleCalendarConnections.selectedCalendarName,
+      blockingCalendarIds: googleCalendarConnections.blockingCalendarIds,
     })
     .from(googleCalendarConnections)
     .limit(1);
 
-  return row ?? null;
+  return row ? { ...row, blockingCalendarIds: JSON.parse(row.blockingCalendarIds) as string[] } : null;
 }
 
 export async function saveGoogleCalendarConnection(input: {
@@ -45,6 +47,7 @@ export async function saveGoogleCalendarConnection(input: {
         refreshTokenCiphertext: input.refreshTokenCiphertext,
         selectedCalendarId: null,
         selectedCalendarName: null,
+        blockingCalendarIds: "[]",
         updatedAt: new Date(),
       })
       .where(eq(googleCalendarConnections.id, existing.id));
@@ -66,6 +69,7 @@ export async function saveGoogleCalendarConnection(input: {
 export async function selectGoogleCalendar(
   calendarId: string,
   calendarName: string,
+  blockingCalendarIds?: string[],
 ): Promise<void> {
   const connection = await getGoogleCalendarConnection();
   if (!connection) {
@@ -77,6 +81,7 @@ export async function selectGoogleCalendar(
     .set({
       selectedCalendarId: calendarId,
       selectedCalendarName: calendarName,
+      ...(blockingCalendarIds === undefined ? {} : { blockingCalendarIds: JSON.stringify([...new Set(blockingCalendarIds)]) }),
       updatedAt: new Date(),
     })
     .where(eq(googleCalendarConnections.id, connection.id));
