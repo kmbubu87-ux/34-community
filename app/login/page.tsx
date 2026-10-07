@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { LoginForm } from "../../components/auth/LoginForm";
 import { getCurrentSessionUser } from "../../src/features/auth/http-session";
 
@@ -12,6 +13,7 @@ export default async function LoginPage() {
         <p className="community-verse">성령이 하나 되게 하신 것을 힘써 지키라(엡 4:3)</p>
       </header>
       <LoginForm />
+      <p className="helper-text"><Link href="/privacy">Google Calendar 연동 개인정보처리방침</Link></p>
     </main>
   );
 }
