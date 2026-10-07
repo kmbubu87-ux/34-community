@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { SessionUser } from "../../src/features/auth/session";
 import { LogoutButton } from "../auth/LogoutButton";
 import { ReportBadge, usePastoralBadge } from "../pastoral/ReportStatusBadge";
@@ -18,6 +18,8 @@ export function MemberShell({
   const [menuOpen, setMenuOpen] = useState(false);
   const unreadCount = useUnreadNoticeCount();
   const pastoral = usePastoralBadge();
+  const [autumnVisible, setAutumnVisible] = useState(false);
+  useEffect(() => { let current = true; void fetch("/api/autumn?status=1", { cache: "no-store" }).then(r => r.ok ? r.json() : null).then(data => { if (current) setAutumnVisible(data?.enabled === true); }).catch(() => undefined); return () => { current = false; }; }, []);
 
   return (
     <div className="community-app">
@@ -27,7 +29,7 @@ export function MemberShell({
           <strong>34사랑</strong>
         </div>
 
-        <MemberSidebar pastoralVisible={pastoral.visible} pastoralCount={pastoral.count} unreadCount={unreadCount} onNavigate={() => setMenuOpen(false)} />
+        <MemberSidebar autumnVisible={autumnVisible} pastoralVisible={pastoral.visible} pastoralCount={pastoral.count} unreadCount={unreadCount} onNavigate={() => setMenuOpen(false)} />
 
         <div className="sidebar-footer">
           <Link href="/profile" onClick={() => setMenuOpen(false)}>내 정보</Link>
