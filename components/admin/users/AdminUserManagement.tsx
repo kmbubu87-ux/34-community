@@ -160,6 +160,7 @@ export function AdminUserManagement({ initial }: { initial: AdminRosterPage }) {
       sam: String(formData.get("sam") ?? "") || null,
       isActive: formData.get("isActive") === "on",
       isAdmin: formData.get("isAdmin") === "on",
+      officerRole: formData.get("officerRole") === "treasurer" ? "treasurer" : null,
     };
 
     setBusy(true);
@@ -256,7 +257,7 @@ export function AdminUserManagement({ initial }: { initial: AdminRosterPage }) {
               <span className="roster-select-cell">
                 <input type="checkbox" checked={selectedIds.has(row.id)} onChange={(event) => toggle(row.id, event.target.checked)} aria-label={row.name + " 선택"} />
               </span>
-              <span><strong>{row.name}</strong>{row.isAdmin && <small>관리자</small>}</span>
+              <span><strong>{row.name}</strong>{row.isAdmin && <small>관리자</small>}{row.officerRole === "treasurer" && <small>임원진 · 총무</small>}</span>
               <span>{row.position ?? "미지정"}</span>
               <span>{row.phone ?? "미등록"}</span>
               <span>{row.samLabel ?? "미지정"}</span>
@@ -306,6 +307,8 @@ export function AdminUserManagement({ initial }: { initial: AdminRosterPage }) {
                 <input name="password" type="password" autoComplete="new-password" placeholder={selectedRoster ? "변경할 때만 입력" : "필요하면 입력"} />
               </label>
               <label className="checkbox-row"><input name="isActive" type="checkbox" defaultChecked={selectedRoster?.isActive ?? true} /> 로그인 허용</label>
+              <label>임원진 역할<select name="officerRole" defaultValue={selectedRoster?.officerRole ?? ""}><option value="">없음</option><option value="treasurer">총무</option></select></label>
+              <p className="muted">총무는 리더·마을장 지정 없이 로그인할 수 있습니다. 관리자 권한은 별도로 지정합니다.</p>
               <label className="checkbox-row"><input name="isAdmin" type="checkbox" defaultChecked={selectedRoster?.isAdmin ?? false} /> 관리자</label>
               <button className="primary-button" type="submit" disabled={busy}>저장</button>
             </form>
