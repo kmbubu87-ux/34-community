@@ -51,6 +51,22 @@ function fakeCalendar() {
 }
 
 describe("Google Calendar provider", () => {
+  it("reads shared calendars without fetching titles and writes only to the visit calendar", async () => {
+    const fake=fakeCalendar();
+    const provider=new GoogleCalendarProvider(fake.client,"visits",["church","church","visits"]);
+    await provider.listEvents({timeMin:"2026-10-01T00:00:00+09:00",timeMax:"2026-11-01T00:00:00+09:00"});
+    const lists=fake.calls.filter(c=>c.method==="list");
+    expect(new Set(lists.map(c=>(c.args as {calendarId:string}).calendarId))).toEqual(new Set(["visits","church"]));
+    for(const call of lists)expect(call.args).toMatchObject({fields:"items(status,start,end),nextPageToken"});
+    await provider.updateVisitEvent("event",{requesterName:"Test",visitDate:"2026-10-08",visitType:"personal",attendees:"",location:"",preferredTime:""});
+    await provider.deleteVisitEvent("event");
+    for(const call of fake.calls.filter(c=>c.method!=="list"))expect(call.args).toMatchObject({calendarId:"visits"});
+  });
+  it("fails closed when a shared calendar cannot be read", async () => {
+    const fake=fakeCalendar();
+    fake.client.events.list=async()=>{throw new Error("access revoked");};
+    await expect(new GoogleCalendarProvider(fake.client,"visits",["church"]).listEvents({timeMin:"2026-10-01",timeMax:"2026-11-01"})).rejects.toThrow("access revoked");
+  });
   it.each([
     ["personal", "5-3샘 심방"],
     ["sam", "5-3샘 심방(샘)"],
