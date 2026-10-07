@@ -14,8 +14,8 @@ vi.mock("../../src/features/google-calendar/client", () => ({
 }));
 
 import { getCurrentSessionUser } from "../../src/features/auth/http-session";
-import { getGoogleCalendarConnection, deleteGoogleCalendarConnection } from "../../src/features/google-calendar/repository";
-import { createGoogleOAuthClient } from "../../src/features/google-calendar/client";
+import { getGoogleCalendarConnection, deleteGoogleCalendarConnection, selectGoogleCalendar } from "../../src/features/google-calendar/repository";
+import { createGoogleOAuthClient, listConnectedCalendars } from "../../src/features/google-calendar/client";
 import { GET as connect } from "../../app/api/admin/google-calendar/connect/route";
 import { GET as status } from "../../app/api/admin/google-calendar/status/route";
 import { DELETE as disconnect } from "../../app/api/admin/google-calendar/connection/route";
@@ -69,6 +69,18 @@ describe("Calendar administrator error handling", () => {
 
   it("returns only safe disconnected status fields", async () => {
     vi.mocked(getGoogleCalendarConnection).mockResolvedValue(null);
-    expect(await (await status()).json()).toEqual({ connected: false, accountEmail: null, selectedCalendarId: null, selectedCalendarName: null });
+    expect(await (await status()).json()).toEqual({ connected: false, accountEmail: null, selectedCalendarId: null, selectedCalendarName: null, blockingCalendarIds: [] });
+  });
+  it("accepts a read-only shared blocker while preserving the writable visit calendar", async () => {
+    vi.mocked(listConnectedCalendars).mockResolvedValue([{id:"visits",summary:"Visits",primary:false,accessRole:"owner"},{id:"church",summary:"Church",primary:false,accessRole:"reader"}]);
+    const response=await selection(new Request("https://example.test",{method:"PUT",headers:{"content-type":"application/json"},body:JSON.stringify({calendarId:"visits",blockingCalendarIds:["church"]})}));
+    expect(response.status).toBe(200);
+    expect(selectGoogleCalendar).toHaveBeenCalledWith("visits","Visits",["church"]);
+  });
+  it("rejects an inaccessible additional calendar without saving", async () => {
+    vi.mocked(listConnectedCalendars).mockResolvedValue([{id:"visits",summary:"Visits",primary:false,accessRole:"owner"}]);
+    const response=await selection(new Request("https://example.test",{method:"PUT",headers:{"content-type":"application/json"},body:JSON.stringify({calendarId:"visits",blockingCalendarIds:["unknown"]})}));
+    expect(response.status).toBe(409);
+    expect(selectGoogleCalendar).not.toHaveBeenCalled();
   });
 });
