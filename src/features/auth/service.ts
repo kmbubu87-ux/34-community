@@ -15,6 +15,7 @@ import {
 } from "../roster/repository";
 import { canonicalizeRosterName } from "../roster/normalize";
 import { reportAccess } from "../pastoral/access";
+import { isApprovedOfficer } from "./officer";
 
 export type ParticipantRecord = {
   id: string;
@@ -180,7 +181,7 @@ export async function authenticateRosterLogin(
   );
   if (!result) return null;
 
-  if (result.participant.role !== "admin" && !(await reportAccess({ id: result.participant.id, displayName: result.roster.canonicalName, role: result.participant.role })).visible) return null;
+  if (result.participant.role !== "admin" && !(await isApprovedOfficer(result.participant.id)) && !(await reportAccess({ id: result.participant.id, displayName: result.roster.canonicalName, role: result.participant.role })).visible) return null;
 
   const session = await createSession(result.participant.id, now);
   return {
