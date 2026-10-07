@@ -15,6 +15,7 @@ export async function GET() {
       accountEmail: connection?.googleAccountEmail ?? null,
       selectedCalendarId: connection?.selectedCalendarId ?? null,
       selectedCalendarName: connection?.selectedCalendarName ?? null,
+      blockingCalendarIds: connection?.blockingCalendarIds ?? [],
     });
   } catch (error) {
     if (error instanceof DomainError) {
