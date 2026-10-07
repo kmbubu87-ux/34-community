@@ -17,5 +17,6 @@ export async function getSelectedCalendarProvider(): Promise<CalendarProvider> {
   return new GoogleCalendarProvider(
     calendar as unknown as CalendarClientLike,
     connection.selectedCalendarId,
+    connection.blockingCalendarIds ?? [],
   );
 }
