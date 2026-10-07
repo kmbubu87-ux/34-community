@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 describe("34사랑 member shell", () => {
   it("pins the required menu order", () => {
     const source = readFileSync("components/app/MemberSidebar.tsx", "utf8");
-    const labels = ["무제", "심방신청", "기도요청", "공지"];
+    const labels = ["가을빛", "심방신청", "기도요청", "공지"];
     let cursor = -1;
     for (const label of labels) {
       const next = source.indexOf(label);
@@ -15,7 +15,7 @@ describe("34사랑 member shell", () => {
 
   it("provides a page for every member tab", () => {
     const pages = [
-      ["app/(member)/page.tsx", "PrayerDashboardNoSsr"],
+      ["app/(member)/autumn/page.tsx", "AutumnCampaign"],
       ["app/(member)/visits/page.tsx", "심방신청"],
       ["app/(member)/prayer-requests/page.tsx", "기도요청"],
       ["app/(member)/notices/page.tsx", "공지"],
@@ -43,4 +43,3 @@ describe("34사랑 member shell", () => {
     }
   });
 });
-  
