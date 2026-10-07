@@ -309,6 +309,7 @@ export const googleCalendarConnections = appSchema.table(
     refreshTokenCiphertext: text("refresh_token_ciphertext").notNull(),
     selectedCalendarId: text("selected_calendar_id"),
     selectedCalendarName: text("selected_calendar_name"),
+    blockingCalendarIds: text("blocking_calendar_ids").notNull().default("[]"),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
   },
