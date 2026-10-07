@@ -70,6 +70,7 @@ export const memberRoster = appSchema.table(
     samLabel: varchar("sam_label", { length: 100 }),
     isActive: boolean("is_active").notNull().default(true),
     isAdmin: boolean("is_admin").notNull().default(false),
+    officerRole: varchar("officer_role", { length: 20 }),
     source: varchar("source", { length: 20 }).notNull(),
     sourceRow: integer("source_row"),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
