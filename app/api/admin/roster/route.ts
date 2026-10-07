@@ -18,6 +18,7 @@ const RosterInput = z.object({
   sam: z.string().trim().max(80).nullable(),
   isActive: z.boolean(),
   isAdmin: z.boolean(),
+  officerRole: z.enum(["treasurer"]).nullable().optional(),
 });
 
 const RosterUpdate = RosterInput.extend({
