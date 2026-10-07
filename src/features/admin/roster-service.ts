@@ -27,6 +27,7 @@ export type AdminRosterInput = {
   sam: string | null;
   isActive: boolean;
   isAdmin: boolean;
+  officerRole?: "treasurer" | null;
 };
 
 export type PreparedAdminRosterValues = {
@@ -40,6 +41,7 @@ export type PreparedAdminRosterValues = {
   samLabel: string | null;
   isActive: boolean;
   isAdmin: boolean;
+  officerRole?: "treasurer" | null;
 };
 
 export type AdminRosterRow = {
@@ -52,6 +54,7 @@ export type AdminRosterRow = {
   samLabel: string | null;
   isActive: boolean;
   isAdmin: boolean;
+  officerRole?: "treasurer" | null;
   joined: boolean;
   passwordMode: "initial" | "custom";
 };
@@ -105,6 +108,7 @@ export function prepareAdminRosterValues(
     samLabel: makeSamLabel(village, sam),
     isActive: input.isActive,
     isAdmin: input.isAdmin,
+    officerRole: input.officerRole ?? null,
   };
 }
 
@@ -158,6 +162,7 @@ export async function listRosterForAdmin({
       samLabel: memberRoster.samLabel,
       isActive: memberRoster.isActive,
       isAdmin: memberRoster.isAdmin,
+      officerRole: memberRoster.officerRole,
       passwordHash: memberRoster.passwordHash,
       userId: users.id,
     })
@@ -175,6 +180,7 @@ export async function listRosterForAdmin({
     samLabel: row.samLabel,
     isActive: row.isActive,
     isAdmin: row.isAdmin,
+    officerRole: row.officerRole === "treasurer" ? "treasurer" as const : null,
     joined: Boolean(row.userId),
     passwordMode: passwordModeFromHash(row.passwordHash),
   }));
