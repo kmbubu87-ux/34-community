@@ -48,19 +48,26 @@ export class GoogleCalendarProvider implements CalendarProvider {
   constructor(
     private readonly calendar: CalendarClientLike,
     private readonly calendarId: string,
+    private readonly blockingCalendarIds: string[] = [],
   ) {}
 
   async listEvents(input: {
     timeMin: string;
     timeMax: string;
   }): Promise<CalendarEventLike[]> {
+    const ids = [...new Set([this.calendarId, ...this.blockingCalendarIds])];
+    const results = await Promise.all(ids.map(id => this.listCalendarEvents(id, input)));
+    return results.flat();
+  }
+
+  private async listCalendarEvents(calendarId: string, input: { timeMin: string; timeMax: string }): Promise<CalendarEventLike[]> {
     const events: CalendarEventLike[] = [];
     const signal = AbortSignal.timeout(8_000);
     let pageToken: string | undefined;
 
     do {
       const response = await this.calendar.events.list({
-        calendarId: this.calendarId,
+        calendarId,
         timeMin: input.timeMin,
         timeMax: input.timeMax,
         singleEvents: true,
