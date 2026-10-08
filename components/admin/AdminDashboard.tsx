@@ -395,13 +395,13 @@ export function AdminDashboard({
           <div>
             <strong>34공동체 명단 가져오기</strong>
             <p className="helper-text">
-              구형 .xls 파일만 허용합니다. 기존 참여자의 기도기록은 유지됩니다.
+              추가할 사용자만 .xls 또는 .xlsx 파일에 입력하세요. 기존 사용자·권한·비밀번호·기록은 유지됩니다.
             </p>
           </div>
           <input
             name="file"
             type="file"
-            accept=".xls,application/vnd.ms-excel"
+            accept=".xls,.xlsx,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
             aria-label="34공동체 XLS 파일"
             required
             disabled={importBusy}
