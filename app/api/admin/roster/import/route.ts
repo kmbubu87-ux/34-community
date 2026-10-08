@@ -1,4 +1,3 @@
-import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import {
   importRosterUploadBuffer,
@@ -6,9 +5,6 @@ import {
 } from "../../../../../src/features/admin/roster-import-service";
 import { requireAdmin } from "../../../../../src/features/admin/service";
 import { getCurrentSessionUser } from "../../../../../src/features/auth/http-session";
-import { canonicalizeRosterName } from "../../../../../src/features/roster/normalize";
-import { getDb } from "../../../../../src/db/client";
-import { users } from "../../../../../src/db/schema";
 import { DomainError } from "../../../../../src/lib/http";
 
 export const runtime = "nodejs";
@@ -50,25 +46,8 @@ export async function POST(request: Request) {
 
     validateRosterUploadMeta({ name: file.name, size: file.size });
 
-    const [credential] = await getDb()
-      .select({
-        displayName: users.displayName,
-        phoneLookupHash: users.phoneLookupHash,
-      })
-      .from(users)
-      .where(eq(users.id, sessionUser.id))
-      .limit(1);
-
-    if (!credential) {
-      return NextResponse.json({ code: "ADMIN_USER_NOT_FOUND" }, { status: 404 });
-    }
-
     const summary = await importRosterUploadBuffer({
       buffer: Buffer.from(await file.arrayBuffer()),
-      adminCredential: {
-        canonicalName: canonicalizeRosterName(credential.displayName),
-        phoneLookupHash: credential.phoneLookupHash,
-      },
     });
 
     return NextResponse.json({ status: "ok", summary });
