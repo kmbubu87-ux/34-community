@@ -7,7 +7,7 @@ describe("dashboard browser-only boundary", () => {
       "components/dashboard/PrayerDashboardNoSsr.tsx",
       "utf8",
     );
-    const page = readFileSync("app/(member)/page.tsx", "utf8");
+    const page = readFileSync("app/(member)/challenge/page.tsx", "utf8");
 
     expect(wrapper).toContain('"use client"');
     expect(wrapper).toMatch(/ssr:\s*false/);
