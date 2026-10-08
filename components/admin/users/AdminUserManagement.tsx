@@ -139,7 +139,7 @@ export function AdminUserManagement({ initial }: { initial: AdminRosterPage }) {
       const body = await response.json().catch(() => ({}));
       if (!response.ok || !body.summary) throw new Error(body.code ?? "ROSTER_IMPORT_FAILED");
       setImportMessage(
-        "명단 " + body.summary.imported + "명 가져오기 완료 · 전화번호 없음 " + body.summary.missingPhone + "명",
+        "새 사용자 " + body.summary.imported + "명 추가 · 기존 사용자 " + (body.summary.skipped ?? 0) + "명 유지 · 전화번호 없음 " + body.summary.missingPhone + "명",
       );
       form.reset();
       await loadRoster(true);
@@ -205,7 +205,7 @@ export function AdminUserManagement({ initial }: { initial: AdminRosterPage }) {
         <form className="roster-import-form" onSubmit={submitImport}>
           <div>
             <strong>34공동체 명단 가져오기</strong>
-            <p className="helper-text">.xls 또는 .xlsx 파일을 가져옵니다. 예제의 이름 · 교회직분 · 핸드폰 · 마을 · 샘 열을 유지하고, 현재 관리자도 명단에 포함해 주세요. 기존 기도기록은 유지됩니다.</p>
+            <p className="helper-text">추가할 사용자만 .xls 또는 .xlsx 파일에 입력하세요. 이름 · 교회직분 · 핸드폰 · 마을 · 샘 열을 유지해 주세요. 기존 관리자·총무·마을장·회원과 비밀번호·기록은 유지되며, 이미 등록된 사람은 건너뜁니다. 리더 역할은 아래 샘 리더 관리에서 연결하세요.</p>
             <a className="text-button" href="/templates/community-roster-example.xlsx" download="34공동체-명단-예제.xlsx">34공동체 명단 엑셀 예제 다운로드</a>
           </div>
           <input
