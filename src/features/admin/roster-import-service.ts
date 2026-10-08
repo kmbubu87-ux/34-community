@@ -1,10 +1,8 @@
 import { DomainError } from "../../lib/http";
 import {
-  importRosterCandidates,
   parseRosterWorkbookBuffer,
-  type ImportSummary,
-  type RosterImportRepository,
 } from "../roster/import";
+import { appendRosterCandidates, type AppendRosterRepository } from "../roster/append";
 
 export const MAX_ROSTER_FILE_BYTES = 2 * 1024 * 1024;
 
@@ -25,19 +23,11 @@ export function validateRosterUploadMeta({
 
 export async function importRosterUploadBuffer({
   buffer,
-  adminCredential,
   repository,
 }: {
   buffer: Buffer;
-  adminCredential: {
-    canonicalName: string;
-    phoneLookupHash: string;
-  };
-  repository?: RosterImportRepository;
-}): Promise<ImportSummary> {
+  repository?: AppendRosterRepository;
+}) {
   const rows = parseRosterWorkbookBuffer(buffer);
-  return importRosterCandidates(rows, {
-    adminCredential,
-    repository,
-  });
+  return appendRosterCandidates(rows, repository);
 }
