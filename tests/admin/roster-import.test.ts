@@ -5,7 +5,6 @@ import {
   importRosterUploadBuffer,
   validateRosterUploadMeta,
 } from "../../src/features/admin/roster-import-service";
-import { phoneLookupHash } from "../../src/features/auth/crypto";
 
 function workbookBuffer() {
   const sheet = utils.aoa_to_sheet([
@@ -40,7 +39,7 @@ describe("admin roster upload boundary", () => {
     ).toThrow("ROSTER_FILE_TOO_LARGE");
   });
 
-  it("imports a buffer using the current admin lookup hash without raw admin phone", async () => {
+  it("adds a partial roster without requiring the logged-in administrator", async () => {
     process.env.DATABASE_URL = "postgres://example";
     process.env.SESSION_SECRET = "s".repeat(32);
     process.env.PHONE_LOOKUP_PEPPER = "p".repeat(32);
@@ -49,13 +48,10 @@ describe("admin roster upload boundary", () => {
     const prepared: Array<{ isAdmin: boolean; samLabel: string | null }> = [];
     const summary = await importRosterUploadBuffer({
       buffer: workbookBuffer(),
-      adminCredential: {
-        canonicalName: "관리자",
-        phoneLookupHash: phoneLookupHash("01012345678"),
-      },
       repository: {
-        replaceXlsRoster: async (rows) => {
+        appendRows: async (rows) => {
           prepared.push(...rows);
+          return { added: rows.length, skipped: 0 };
         },
       },
     });
@@ -63,10 +59,11 @@ describe("admin roster upload boundary", () => {
     expect(summary).toEqual({
       total: 2,
       imported: 2,
+      skipped: 0,
       missingPhone: 0,
       errors: 0,
     });
-    expect(prepared[0]).toMatchObject({ isAdmin: true, samLabel: "1-6" });
+    expect(prepared[0]).toMatchObject({ isAdmin: false, samLabel: "1-6" });
     expect(prepared[1]).toMatchObject({ isAdmin: false, samLabel: "2-3" });
   });
 });
